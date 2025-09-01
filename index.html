@@ -24,8 +24,12 @@
 
     .btn{display:inline-block;padding:10px 16px;border-radius:10px;background:var(--accent);color:white;text-decoration:none;font-weight:600;margin-top:12px;text-align:center}
     .btn-paytm{background:#01baf2}
+    .btn-secondary{background:#2d3748}
 
-    @media (max-width:420px){.btn{width:100%}}
+    .qr-wrap{text-align:center;margin-top:16px}
+    .qr-wrap img{width:220px;height:220px;border-radius:8px;background:#fff;padding:8px}
+
+    @media (max-width:420px){.btn{width:100%}.qr-wrap img{width:180px;height:180px}}
   </style>
 </head>
 <body>
@@ -53,7 +57,14 @@
         </div>
       </div>
 
-      <a id="paytmBtn" class="btn btn-paytm" style="display:none" href="#">Pay using Paytm</a>
+      <div id="paymentSection" style="display:none">
+        <div class="qr-wrap">
+          <div class="note">Scan this QR to pay</div>
+          <img id="qrImage" src="qr.png" alt="Paytm QR" />
+        </div>
+        <a id="paytmBtn" class="btn btn-paytm" href="#">Pay using Paytm Directly</a>
+        <a id="completeBtn" class="btn btn-secondary" href="#">Complete Payment</a>
+      </div>
 
       <div id="msg" style="margin-top:12px;color:#b3d4ff;font-size:13px"></div>
     </div>
@@ -65,6 +76,8 @@
     const displayQty = document.getElementById('displayQty');
     const displayTotal = document.getElementById('displayTotal');
     const paytmBtn = document.getElementById('paytmBtn');
+    const completeBtn = document.getElementById('completeBtn');
+    const paymentSection = document.getElementById('paymentSection');
     const msg = document.getElementById('msg');
 
     function formatINR(n){ return '₹' + n.toLocaleString('en-IN'); }
@@ -79,18 +92,22 @@
       displayTotal.textContent = formatINR(total);
 
       if(q > 0){
-        paytmBtn.style.display = 'block';
+        paymentSection.style.display = 'block';
         const upiLink = `upi://pay?pa=paytm.s1p45vv@pty&pn=Paytm&am=${total}&cu=INR`;
         paytmBtn.href = upiLink;
-        msg.textContent = '';
       } else {
-        paytmBtn.style.display = 'none';
+        paymentSection.style.display = 'none';
         msg.textContent = '';
       }
     }
 
     countEl.addEventListener('input', update);
     countEl.addEventListener('change', update);
+
+    completeBtn.addEventListener('click', (e)=>{
+      e.preventDefault();
+      msg.textContent = '✅ Payment marked complete. Please send your UTR and payment screenshot to @fastxp2p1 on Telegram to receive your codes.';
+    });
 
     window.addEventListener('load', ()=>{ countEl.focus(); });
   </script>
