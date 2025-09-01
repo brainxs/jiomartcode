@@ -5,45 +5,148 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>JioMart Codes — Pay via Paytm</title>
   <style>
-    :root{--accent:#0b74de;--bg:#0f1720;--card:#0b1220;--glass: rgba(255,255,255,0.04);}
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;color:#e6eef8;background:linear-gradient(180deg,#071026 0%, #081426 100%);}
-    .wrap{max-width:520px;margin:28px auto;padding:18px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:18px;box-shadow:0 6px 24px rgba(2,6,23,0.6);}
-    h1{font-size:20px;margin:0 0 8px}
-    p.lead{margin:0 0 18px;color:#a9c2dd;font-size:13px}
+    :root {
+      --accent:#0b74de;
+      --accent-glow: #3ba9ff;
+      --bg:#0f1720;
+      --card:#0b1220;
+      --glass: rgba(255,255,255,0.05);
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html,body {
+      height:100%;
+      font-family: "Inter", system-ui, sans-serif;
+      background: linear-gradient(160deg, #071026, #09182c, #081426);
+      color:#e6eef8;
+    }
 
-    .row{display:flex;gap:12px;align-items:center}
-    label{font-size:13px;color:#bcd6f2}
-    input[type=number]{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:inherit;font-size:16px}
-    .muted{font-size:13px;color:#9fb6d8}
+    .wrap {
+      max-width:540px;
+      margin:32px auto;
+      padding:20px;
+    }
 
-    .summary{margin-top:16px;padding:12px;border-radius:10px;background:rgba(255,255,255,0.02);display:flex;justify-content:space-between;align-items:center}
-    .price{font-weight:700;font-size:18px}
-    .note{font-size:12px;color:#9fb6d8}
+    .card {
+      background: var(--glass);
+      border-radius:16px;
+      padding:24px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.6);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.08);
+      animation: fadeIn 0.6s ease;
+    }
 
-    .btn{display:inline-block;padding:10px 16px;border-radius:10px;background:var(--accent);color:white;text-decoration:none;font-weight:600;margin-top:12px;text-align:center}
-    .btn-paytm{background:#01baf2}
-    .btn-secondary{background:#2d3748}
+    h1 {
+      font-size:22px;
+      font-weight:700;
+      margin-bottom:8px;
+      background: linear-gradient(90deg,#00c6ff,#0072ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-    .qr-wrap{text-align:center;margin-top:16px}
-    .qr-wrap img{width:220px;height:220px;border-radius:8px;background:#fff;padding:8px}
+    p.lead {
+      color:#a9c2dd;
+      font-size:14px;
+      margin-bottom:20px;
+    }
 
-    @media (max-width:420px){.btn{width:100%}.qr-wrap img{width:180px;height:180px}}
+    label {
+      font-size:14px;
+      font-weight:500;
+      color:#bcd6f2;
+    }
+
+    input[type=number] {
+      width:100%;
+      margin-top:8px;
+      padding:14px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color:inherit;
+      font-size:16px;
+      outline:none;
+      transition: border 0.2s;
+    }
+    input[type=number]:focus {
+      border:1px solid var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    .muted { font-size:13px; color:#9fb6d8; margin-top:6px; }
+
+    .summary {
+      margin-top:18px;
+      padding:14px 16px;
+      border-radius:12px;
+      background:rgba(255,255,255,0.03);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .summary .note { font-size:13px; color:#9fb6d8; }
+    .summary .price { font-weight:700; font-size:20px; color:#fff; }
+
+    .btn {
+      display:block;
+      width:100%;
+      padding:14px;
+      margin-top:14px;
+      border-radius:12px;
+      text-align:center;
+      font-weight:600;
+      text-decoration:none;
+      font-size:15px;
+      transition:transform 0.15s, box-shadow 0.15s;
+    }
+    .btn:hover { transform:translateY(-2px); box-shadow:0 6px 18px rgba(0,0,0,0.4); }
+    .btn-paytm { background:#01baf2; color:#fff; }
+    .btn-secondary { background:#2d3748; color:#fff; }
+
+    .qr-wrap {
+      text-align:center;
+      margin-top:20px;
+    }
+    .qr-wrap img {
+      width:220px;
+      height:220px;
+      border-radius:12px;
+      background:#fff;
+      padding:10px;
+      box-shadow:0 4px 14px rgba(0,0,0,0.4);
+    }
+
+    #msg {
+      margin-top:14px;
+      color:#b3d4ff;
+      font-size:14px;
+      text-align:center;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @media (max-width:480px){
+      .wrap { padding:12px; }
+      .qr-wrap img { width:180px; height:180px; }
+      .btn { font-size:14px; }
+    }
+
+    @keyframes fadeIn {
+      from {opacity:0; transform:translateY(8px);}
+      to {opacity:1; transform:translateY(0);}
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
       <h1>JioMart Code — Pay via Paytm</h1>
-      <p class="lead">Each JioMart code = <strong>₹30</strong>. Enter how many codes you want and pay using Paytm.</p>
+      <p class="lead">Each JioMart code costs <strong>₹30</strong>. Enter the quantity, pay securely via Paytm, and get your codes.</p>
 
       <div>
         <label for="count">How many codes do you need?</label>
-        <div style="margin-top:8px" class="row">
-          <input id="count" type="number" min="1" inputmode="numeric" pattern="[0-9]*" placeholder="Enter quantity (e.g. 10)" />
-        </div>
-        <div style="margin-top:8px" class="muted">Price per code: <strong>₹30</strong></div>
+        <input id="count" type="number" min="1" inputmode="numeric" placeholder="Enter quantity (e.g. 10)" />
+        <div class="muted">Price per code: <strong>₹30</strong></div>
       </div>
 
       <div class="summary" id="summary" aria-live="polite">
@@ -59,14 +162,14 @@
 
       <div id="paymentSection" style="display:none">
         <div class="qr-wrap">
-          <div class="note">Scan this QR to pay</div>
+          <div class="note">Scan QR to pay</div>
           <img id="qrImage" src="qr.png" alt="Paytm QR" />
         </div>
-        <a id="paytmBtn" class="btn btn-paytm" href="#">Pay using Paytm Directly</a>
-        <a id="completeBtn" class="btn btn-secondary" href="#">Complete Payment</a>
+        <a id="paytmBtn" class="btn btn-paytm" href="#">💳 Pay using Paytm</a>
+        <a id="completeBtn" class="btn btn-secondary" href="#">✅ Complete Payment</a>
       </div>
 
-      <div id="msg" style="margin-top:12px;color:#b3d4ff;font-size:13px"></div>
+      <div id="msg"></div>
     </div>
   </div>
 
@@ -79,9 +182,9 @@
     const completeBtn = document.getElementById('completeBtn');
     const paymentSection = document.getElementById('paymentSection');
     const msg = document.getElementById('msg');
-  
+
     function formatINR(n){ return '₹' + n.toLocaleString('en-IN'); }
-  
+
     function update(){
       let q = parseInt(countEl.value,10);
       if(!Number.isFinite(q) || q <= 0){
@@ -90,7 +193,7 @@
       const total = q * PRICE;
       displayQty.textContent = q;
       displayTotal.textContent = formatINR(total);
-  
+
       if(q > 0){
         paymentSection.style.display = 'block';
         const upiLink = `upi://pay?pa=paytm.s1p45vv@pty&pn=Paytm&am=${total}&cu=INR`;
@@ -100,20 +203,16 @@
         msg.textContent = '';
       }
     }
-  
+
     countEl.addEventListener('input', update);
-    countEl.addEventListener('change', update);
-  
+
     completeBtn.addEventListener('click', (e)=>{
       e.preventDefault();
       msg.textContent = '✅ Payment marked complete. Please send your UTR and payment screenshot to @fastxp2p1 on Telegram to receive your codes.';
-      
       setTimeout(()=>{
         window.location.href = "https://telegram.dog/fastxp2p";
       }, 3000);
     });
-  
-    window.addEventListener('load', ()=>{ countEl.focus(); });
   </script>
 </body>
 </html>
