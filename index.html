@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>JioMart Codes — QR Payment</title>
+  <style>
+    :root{--accent:#0b74de;--bg:#0f1720;--card:#0b1220;--glass: rgba(255,255,255,0.04);}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;color:#e6eef8;background:linear-gradient(180deg,#071026 0%, #081426 100%);}
+    .wrap{max-width:520px;margin:28px auto;padding:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:18px;box-shadow:0 6px 24px rgba(2,6,23,0.6);}
+    h1{font-size:20px;margin:0 0 8px}
+    p.lead{margin:0 0 18px;color:#a9c2dd;font-size:13px}
+
+    .row{display:flex;gap:12px;align-items:center}
+    label{font-size:13px;color:#bcd6f2}
+    input[type=number]{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:inherit;font-size:16px}
+    .muted{font-size:13px;color:#9fb6d8}
+
+    .summary{margin-top:16px;padding:12px;border-radius:10px;background:rgba(255,255,255,0.02);display:flex;justify-content:space-between;align-items:center}
+    .price{font-weight:700;font-size:18px}
+    .note{font-size:12px;color:#9fb6d8}
+
+    .qr-wrap{margin-top:18px;text-align:center}
+    img.qr{width:220px;height:220px;border-radius:8px;object-fit:contain;border:1px solid rgba(255,255,255,0.03);background:white;padding:8px}
+
+    .btn{display:inline-block;padding:10px 16px;border-radius:10px;background:var(--accent);color:white;text-decoration:none;font-weight:600;margin-top:12px}
+    .row-2{display:flex;gap:10px;margin-top:12px}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.08);color:#d7e9ff}
+
+    @media (max-width:420px){.qr{width:180px;height:180px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>JioMart Code — QR Payment</h1>
+      <p class="lead">Each JioMart code = <strong>₹30</strong>. Enter how many codes you want and pay using the QR below.</p>
+
+      <div>
+        <label for="count">How many codes do you need?</label>
+        <div style="margin-top:8px" class="row">
+          <input id="count" type="number" min="1" inputmode="numeric" pattern="[0-9]*" placeholder="Enter quantity (e.g. 10)" />
+        </div>
+        <div style="margin-top:8px" class="muted">Price per code: <strong>₹30</strong></div>
+      </div>
+
+      <div class="summary" id="summary" aria-live="polite">
+        <div>
+          <div class="note">Quantity</div>
+          <div id="displayQty">0</div>
+        </div>
+        <div style="text-align:right">
+          <div class="note">Total to pay</div>
+          <div class="price" id="displayTotal">₹0</div>
+        </div>
+      </div>
+
+      <div class="qr-wrap" id="qrWrap" style="display:none">
+        <div class="note">Scan this QR to pay the exact amount</div>
+        <img src="qr.png" alt="Payment QR" class="qr" id="qrImage" />
+        <div class="row-2" style="justify-content:center">
+          <a id="openQr" class="btn-ghost btn" href="#" target="_blank">Open QR Image</a>
+          <a id="proceed" class="btn" href="#">Proceed (I have paid)</a>
+        </div>
+        <div class="muted" style="margin-top:8px">Tip: After scanning, please confirm the exact amount shown on your banking app before authorizing payment.</div>
+      </div>
+
+      <div id="msg" style="margin-top:12px;color:#b3d4ff;font-size:13px"></div>
+    </div>
+  </div>
+
+  <script>
+    const PRICE = 30;
+    const countEl = document.getElementById('count');
+    const displayQty = document.getElementById('displayQty');
+    const displayTotal = document.getElementById('displayTotal');
+    const qrWrap = document.getElementById('qrWrap');
+    const qrImage = document.getElementById('qrImage');
+    const openQr = document.getElementById('openQr');
+    const proceed = document.getElementById('proceed');
+    const msg = document.getElementById('msg');
+
+    function formatINR(n){ return '₹' + n.toLocaleString('en-IN'); }
+
+    function update(){
+      let q = parseInt(countEl.value,10);
+      if(!Number.isFinite(q) || q <= 0){
+        q = 0;
+      }
+      const total = q * PRICE;
+      displayQty.textContent = q;
+      displayTotal.textContent = formatINR(total);
+
+      if(q > 0){
+        qrWrap.style.display = 'block';
+        // Open QR to the image file - helpful for mobile to zoom or save
+        openQr.href = 'qr.png';
+        // Add amount info to image url as hash so user can see amount (no server needed)
+        openQr.title = 'Open QR image (save or scan)';
+        proceed.href = '#';
+        proceed.onclick = (e) => { e.preventDefault();
+          msg.textContent = 'Marked as paid for ' + q + ' code(s) — ' + formatINR(total) + '. Please verify payment before sending codes.';
+          // You can replace this with a form submit or an AJAX call to your server
+        };
+      } else {
+        qrWrap.style.display = 'none';
+        msg.textContent = '';
+      }
+    }
+
+    countEl.addEventListener('input', update);
+    countEl.addEventListener('change', update);
+
+    // keyboard-friendly: if user presses enter, focus proceed
+    countEl.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        if(parseInt(countEl.value,10) > 0) proceed.click();
+      }
+    });
+
+    // small accessibility: auto-focus on load for faster mobile entry
+    window.addEventListener('load', ()=>{ countEl.focus(); });
+  </script>
+</body>
+</html>
