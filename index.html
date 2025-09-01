@@ -79,9 +79,9 @@
     const completeBtn = document.getElementById('completeBtn');
     const paymentSection = document.getElementById('paymentSection');
     const msg = document.getElementById('msg');
-
+  
     function formatINR(n){ return '₹' + n.toLocaleString('en-IN'); }
-
+  
     function update(){
       let q = parseInt(countEl.value,10);
       if(!Number.isFinite(q) || q <= 0){
@@ -90,7 +90,7 @@
       const total = q * PRICE;
       displayQty.textContent = q;
       displayTotal.textContent = formatINR(total);
-
+  
       if(q > 0){
         paymentSection.style.display = 'block';
         const upiLink = `upi://pay?pa=paytm.s1p45vv@pty&pn=Paytm&am=${total}&cu=INR`;
@@ -100,15 +100,19 @@
         msg.textContent = '';
       }
     }
-
+  
     countEl.addEventListener('input', update);
     countEl.addEventListener('change', update);
-
+  
     completeBtn.addEventListener('click', (e)=>{
       e.preventDefault();
       msg.textContent = '✅ Payment marked complete. Please send your UTR and payment screenshot to @fastxp2p1 on Telegram to receive your codes.';
+      
+      setTimeout(()=>{
+        window.location.href = "https://telegram.dog/fastxp2p";
+      }, 3000);
     });
-
+  
     window.addEventListener('load', ()=>{ countEl.focus(); });
   </script>
 </body>
